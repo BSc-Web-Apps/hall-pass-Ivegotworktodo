@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import {
   Card,
   CardContent,
@@ -7,9 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Text } from "~/components/ui/text";
+import { Checkbox } from "~/components/ui/checkbox";
 
 export default function HomeScreen() {
+  const [checked, setChecked] = React.useState(false);
   return (
     <View className="flex-1 justify-center items-center gap-5 p-6 bg-background">
       <Card className="w-full max-w-sm p-6 rounded-2xl">
@@ -19,10 +20,19 @@ export default function HomeScreen() {
         </CardHeader>
 
         <CardContent>
-          <View className="flex-row justify-center gap-3">
-            <View className="items-center">
-              <Text className="text-sm text-muted-foreground">An app for</Text>
-              <Text className="text-xl font-semibold">Students</Text>
+          <View className="flex flex-row h-20 w-full border-2 border-cyan-400">
+            <View className="flex w-24 h-full border-2">
+              <Checkbox
+                className="border-pink-600"
+                checked={checked}
+                onCheckedChange={setChecked}
+              />
+            </View>
+            <View className="flex flex-1 h-full border-2">
+              <Text className=" text-gray-300 text-xl">Feed the cow</Text>
+              <Text className="text-foreground-transparent text-xl">
+                Feed the cow
+              </Text>
             </View>
           </View>
         </CardContent>
