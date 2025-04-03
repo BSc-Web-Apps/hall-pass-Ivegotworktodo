@@ -2,7 +2,8 @@ import * as React from "react";
 import { View, Text } from "react-native";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Checkbox } from "~/components/ui/checkbox";
-
+import Code from "./Code";
+import Container from "./Container";
 interface TaskProps {
   title: string;
   category: string;
@@ -10,9 +11,36 @@ interface TaskProps {
 }
 
 function Task({ title, category, isChecked }: TaskProps) {
+  const [count, setCount] = React.useState(0);
+
+  function handleAdd() {
+    setCount((count) => count + 1);
+  }
+  function handleSubtract() {
+    setCount((count) => count - 1);
+  }
+
   const [checked, setChecked] = React.useState(isChecked);
   return (
     <View className="flex flex-row h-20 w-full border-2 border-cyan-400">
+      <Text>
+        <Code>count</Code> is currently: <Code>{count}</Code>
+      </Text>
+
+      <View className="flex justify-center gap-4">
+        <button
+          className="self-center px-8 py-4 bg-stone-700"
+          onClick={handleAdd}
+        >
+          Add 1
+        </button>
+        <button
+          className="self-center px-8 py-4 bg-stone-700"
+          onClick={handleSubtract}
+        >
+          Remove 1
+        </button>
+      </View>
       <View className="flex w-24 h-full border-2 border-red-600 justify-center items-center">
         <Checkbox
           className="border-pink-600"
