@@ -1,9 +1,7 @@
 import * as React from "react";
 import { View, Text } from "react-native";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Checkbox } from "~/components/ui/checkbox";
-import Code from "./Code";
-import Container from "./Container";
+
 interface TaskProps {
   title: string;
   category: string;
@@ -12,47 +10,50 @@ interface TaskProps {
 
 function Task({ title, category, isChecked }: TaskProps) {
   const [count, setCount] = React.useState(0);
+  const [checked, setChecked] = React.useState(isChecked);
 
   function handleAdd() {
-    setCount((count) => count + 1);
+    setCount((prev) => prev + 1);
   }
+
   function handleSubtract() {
-    setCount((count) => count - 1);
+    setCount((prev) => (prev > 0 ? prev - 1 : 0));
   }
 
-  const [checked, setChecked] = React.useState(isChecked);
-  return (
-    <View className="flex flex-row h-20 w-full border-2 border-cyan-400">
-      <Text>
-        <Code>count</Code> is currently: <Code>{count}</Code>
-      </Text>
+  React.useEffect(() => {
+    setChecked(count === 0);
+  }, [count]);
 
-      <View className="flex justify-center gap-4">
-        <button
-          className="self-center px-8 py-4 bg-stone-700"
-          onClick={handleAdd}
-        >
-          Add 1
-        </button>
-        <button
-          className="self-center px-8 py-4 bg-stone-700"
-          onClick={handleSubtract}
-        >
-          Remove 1
-        </button>
-      </View>
+  function handleCheckboxChange(newChecked: boolean) {
+    if (newChecked) {
+      setCount(0);
+    }
+    setChecked(newChecked);
+  }
+
+  return (
+    <View className="flex flex-row h-40 w-full border-2 border-cyan-400">
       <View className="flex w-24 h-full border-2 border-red-600 justify-center items-center">
         <Checkbox
           className="border-pink-600"
           checked={checked}
-          onCheckedChange={setChecked}
+          onCheckedChange={handleCheckboxChange}
           style={{ transform: [{ scale: 2 }] }}
         />
+        <View className="flex justify-center gap-4 pt-5">
+          <button className="self-center text-white" onClick={handleAdd}>
+            Add 1
+          </button>
+          <button className="self-center text-white" onClick={handleSubtract}>
+            Remove 1
+          </button>
+        </View>
       </View>
       <View className="flex flex-1 h-full border-2">
         <Text className=" text-gray-300 text-xl">{title}</Text>
         <Text className="text-foreground-transparent text-xl">{category}</Text>
       </View>
+      <Text className="text-white text-xl">{count}</Text>
     </View>
   );
 }
@@ -92,13 +93,14 @@ export default function HomeScreen() {
   ];
   return (
     <View className="flex-1 justify-center items-center gap-5 p-6 bg-background">
-      <Card className="w-full max-w-sm p-6 rounded-2xl">
-        <CardHeader className="items-center">
-          <CardTitle className="pb-2 text-center">Hall Pass</CardTitle>
-          <Text>{new Date().toLocaleTimeString()}</Text>
-        </CardHeader>
+      <View className="w-full max-w-sm p-6 rounded-2xl">
+        <View className="items-center">
+          <Text className="pb-2 text-center text-3xl font-bold text-white">
+            Hall Pass
+          </Text>
+        </View>
 
-        <CardContent>
+        <View>
           {tasks.map((task) => (
             <Task
               key={task.id}
@@ -107,8 +109,8 @@ export default function HomeScreen() {
               isChecked={task.isChecked}
             />
           ))}
-        </CardContent>
-      </Card>
+        </View>
+      </View>
     </View>
   );
 }
