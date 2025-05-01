@@ -8,6 +8,7 @@ import { Info } from "~/lib/icons/Info";
 import { useColorScheme } from "~/lib/useColorScheme";
 import HomeScreen from "./index";
 import SettingsScreen from "./settings";
+import { PortalHost } from "@rn-primitives/portal";
 
 const Tab = createBottomTabNavigator();
 
@@ -40,34 +41,37 @@ export default function RootLayout() {
   }
 
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: "hsl(11, 72%, 3%)",
-          borderTopColor: "transparent",
-        },
-        tabBarActiveTintColor: "hsl(11, 100%, 60%)",
-        tabBarInactiveTintColor: "hsla(11, 20%, 64%, 0.5)",
-      }}
-    >
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <HomeIcon size={size} color={color} />
-          ),
+    <>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: "hsl(11, 72%, 3%)",
+            borderTopColor: "transparent",
+          },
+          tabBarActiveTintColor: "hsl(11, 100%, 60%)",
+          tabBarInactiveTintColor: "hsla(11, 20%, 64%, 0.5)",
         }}
-      />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => <Info size={size} color={color} />,
-        }}
-      />
-    </Tab.Navigator>
+      >
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <HomeIcon size={size} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            tabBarIcon: ({ color, size }) => <Info size={size} color={color} />,
+          }}
+        />
+      </Tab.Navigator>
+      <PortalHost />
+    </>
   );
 }
 

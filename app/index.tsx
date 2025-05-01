@@ -1,11 +1,24 @@
 import * as React from "react";
-import { View, Text } from "react-native";
+import { TouchableOpacity, View, Text } from "react-native";
 import { Checkbox } from "~/components/ui/checkbox";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogTrigger,
+  DialogDescription,
+} from "~/components/ui/dialog";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 
 interface TaskProps {
   title: string;
   category: string;
   isChecked: boolean;
+  onEdit?: (newTitle: string, newCategory: string) => void;
 }
 
 function Task({ title, category, isChecked }: TaskProps) {
@@ -32,29 +45,68 @@ function Task({ title, category, isChecked }: TaskProps) {
   }
 
   return (
-    <View className="flex flex-row h-40 w-full border-2 border-cyan-400">
-      <View className="flex w-24 h-full border-2 border-red-600 justify-center items-center">
-        <Checkbox
-          className="border-pink-600"
-          checked={checked}
-          onCheckedChange={handleCheckboxChange}
-          style={{ transform: [{ scale: 2 }] }}
-        />
-        <View className="flex justify-center gap-4 pt-5">
-          <button className="self-center text-white" onClick={handleAdd}>
-            Add 1
-          </button>
-          <button className="self-center text-white" onClick={handleSubtract}>
-            Remove 1
-          </button>
+    <Dialog>
+      <DialogTrigger asChild>
+        <TouchableOpacity
+          className="flex flex-row h-40 w-full border-2 border-cyan-400"
+          delayLongPress={500}
+        >
+          <View className="flex w-24 h-full border-2 border-red-600 justify-center items-center">
+            <Checkbox
+              className="border-pink-600"
+              checked={checked}
+              onCheckedChange={handleCheckboxChange}
+              style={{ transform: [{ scale: 2 }] }}
+            />
+            <View className="flex justify-center gap-4 pt-5">
+              <button className="self-center text-white" onClick={handleAdd}>
+                Add 1
+              </button>
+              <button
+                className="self-center text-white"
+                onClick={handleSubtract}
+              >
+                Remove 1
+              </button>
+            </View>
+          </View>
+          <View className="flex flex-1 h-full border-2">
+            <Text className=" text-gray-300 text-xl">{title}</Text>
+            <Text className="text-foreground-transparent text-xl">
+              {category}
+            </Text>
+          </View>
+          <Text className="text-white text-xl">{count}</Text>
+        </TouchableOpacity>
+      </DialogTrigger>
+
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Edit Task</DialogTitle>
+          <DialogDescription>
+            Make changes to your task details here.
+          </DialogDescription>
+        </DialogHeader>
+
+        <View className="gap-4">
+          <Input defaultValue={title} placeholder="Task title" />
+          <Input defaultValue={category} placeholder="Category" />
         </View>
-      </View>
-      <View className="flex flex-1 h-full border-2">
-        <Text className=" text-gray-300 text-xl">{title}</Text>
-        <Text className="text-foreground-transparent text-xl">{category}</Text>
-      </View>
-      <Text className="text-white text-xl">{count}</Text>
-    </View>
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">
+              <Text>Cancel</Text>
+            </Button>
+          </DialogClose>
+          <DialogClose asChild>
+            <Button>
+              <Text>Save changes</Text>
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -99,7 +151,7 @@ export default function HomeScreen() {
             Hall Pass
           </Text>
         </View>
-
+        {/*add loading screen + add 'Please add your first task...'*/}
         <View>
           {tasks.map((task) => (
             <Task
