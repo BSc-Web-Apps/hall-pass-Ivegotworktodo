@@ -70,28 +70,24 @@ export default function TaskDialog({
 
         <View className="gap-4">
           <Input
-            defaultValue={title}
+            value={editedTitle}
             placeholder="Task title"
             onChangeText={handleUpdateTitle}
           />
           <Input
-            defaultValue={category}
+            value={editedCategory}
             placeholder="Category"
             onChangeText={handleUpdateCategory}
           />
         </View>
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">
-              <Text>Cancel</Text>
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button onPress={handleSave}>
-              <Text>Save changes</Text>
-            </Button>
-          </DialogClose>
+          <Button variant="outline" onPress={() => setShowDialog(false)}>
+            <Text>Cancel</Text>
+          </Button>
+          <Button onPress={handleSave}>
+            <Text>Save changes</Text>
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

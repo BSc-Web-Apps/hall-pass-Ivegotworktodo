@@ -13,14 +13,19 @@ export interface Task {
 
 export interface TaskProps {
   task: Task;
+  onUpdate?: (task: Task) => void;
+  onDelete?: (taskId: number) => void;
 }
 
-export default function Task({ task: propTask }: TaskProps) {
+export default function Task({
+  task: propTask,
+  onUpdate,
+  onDelete,
+}: TaskProps) {
   const [task, setTask] = React.useState(propTask);
   const [showDialog, setShowDialog] = React.useState(false);
   const { title, category, isChecked } = task;
   const [count, setCount] = React.useState(0);
-  const [checked, setChecked] = React.useState(isChecked);
 
   function handleAdd() {
     setCount((prev) => prev + 1);
@@ -30,17 +35,19 @@ export default function Task({ task: propTask }: TaskProps) {
     setCount((prev) => (prev > 0 ? prev - 1 : 0));
   }
 
-  React.useEffect(() => {
-    setChecked(count === 0);
-  }, [count]);
-
   const handleSetChecked = (newChecked: boolean) => {
-    const nextChecked = !task.isChecked;
-    setTask({ ...task, isChecked: nextChecked });
-    if (newChecked) {
-      setCount(0);
+    const updatedTask = { ...task, isChecked: !task.isChecked };
+    setTask(updatedTask);
+    if (onUpdate) {
+      onUpdate(updatedTask);
     }
-    setChecked(newChecked);
+  };
+
+  const handleTaskUpdate = (updatedTask: Task) => {
+    setTask(updatedTask);
+    if (onUpdate) {
+      onUpdate(updatedTask);
+    }
   };
 
   return (
@@ -76,6 +83,11 @@ export default function Task({ task: propTask }: TaskProps) {
           <Text className="text-foreground-transparent text-xl">
             {category}
           </Text>
+        </View>
+        <View className="justify-center px-4">
+          <TouchableOpacity onPress={() => onDelete?.(task.id)}>
+            <Text className="text-red-500 text-xl">✕</Text>
+          </TouchableOpacity>
         </View>
         <Text className="text-white text-xl">{count}</Text>
       </TouchableOpacity>

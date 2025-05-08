@@ -20,6 +20,13 @@ export default function AddTask({ onAdd }: AddTaskProps) {
     }
   };
 
+  React.useEffect(() => {
+    if (!showDialog) {
+      setTitle("");
+      setCategory("");
+    }
+  }, [showDialog]);
+
   return (
     <View className="absolute -bottom-0 z-10">
       <View className="w-24 h-24 p-1 bg-brand-primary rounded-full flex items-center justify-center">

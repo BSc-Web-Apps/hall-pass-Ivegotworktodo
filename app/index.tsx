@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ScrollView, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Task from "~/components/Task";
 import AddTask from "~/components/AddTask";
 import { Text } from "~/components/ui/text";
@@ -11,44 +12,59 @@ interface TaskItem {
   isChecked: boolean;
 }
 
+const TASKS_STORAGE_KEY = "hallpass_tasks";
+const saveTasks = async (updatedTasks: TaskItem[]) => {
+  try {
+    await AsyncStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(updatedTasks));
+  } catch (error) {
+    console.error("Failed to save tasks:", error);
+  }
+};
+
 export default function HomeScreen() {
-  const [tasks, setTasks] = React.useState<TaskItem[]>([
-    {
-      id: 1,
-      title: "Read Chapter 9",
-      category: "English Literature",
-      isChecked: false,
-    },
-    {
-      id: 2,
-      title: "Case Study Essay",
-      category: "Geography",
-      isChecked: false,
-    },
-    {
-      id: 3,
-      title: "Book Essay",
-      category: "English Literature",
-      isChecked: false,
-    },
-    {
-      id: 4,
-      title: "Quadratics Worksheet",
-      category: "Maths",
-      isChecked: false,
-    },
-    {
-      id: 5,
-      title: "Draw Design",
-      category: "Design & Technology",
-      isChecked: false,
-    },
-  ]);
+  const [tasks, setTasks] = React.useState<TaskItem[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const storedTasks = await AsyncStorage.getItem(TASKS_STORAGE_KEY);
+        if (storedTasks !== null) {
+          setTasks(JSON.parse(storedTasks));
+        }
+      } catch (error) {
+        console.error("Failed to load tasks:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTasks();
+  }, []);
 
   const handleAddTask = (title: string, category: string) => {
     const nextId =
       tasks.length > 0 ? Math.max(...tasks.map((t) => t.id)) + 1 : 1;
-    setTasks([...tasks, { id: nextId, title, category, isChecked: false }]);
+    const updatedTasks = [
+      ...tasks,
+      { id: nextId, title, category, isChecked: false },
+    ];
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
+  };
+
+  const handleDeleteTask = (taskId: number) => {
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
+  };
+
+  const handleTaskUpdate = (updatedTask: TaskItem) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === updatedTask.id ? updatedTask : task
+    );
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
   };
 
   return (
@@ -67,9 +83,24 @@ export default function HomeScreen() {
           paddingVertical: 16,
         }}
       >
-        {tasks.map((task) => (
-          <Task key={task.id} task={task} />
-        ))}
+        {isLoading ? (
+          <Text className="text-center text-foreground text-lg">
+            Loading tasks...
+          </Text>
+        ) : tasks.length === 0 ? (
+          <Text className="text-center text-foreground text-lg">
+            Please add your first task...
+          </Text>
+        ) : (
+          tasks.map((task) => (
+            <Task
+              key={task.id}
+              task={task}
+              onUpdate={handleTaskUpdate}
+              onDelete={handleDeleteTask}
+            />
+          ))
+        )}
       </ScrollView>
       <View className="relative flex items-center">
         <AddTask onAdd={handleAddTask} />
