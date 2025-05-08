@@ -4,7 +4,6 @@ import { Task } from "./Task";
 import { Button } from "./ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -19,7 +18,7 @@ interface TaskDialogProps {
   setTask: (task: Task) => void;
   setShowDialog: (showDialog: boolean) => void;
   showDialog: boolean;
-  onSave?: () => void;
+  onSave?: (updatedTask: Task) => void;
 }
 
 export default function TaskDialog({
@@ -29,19 +28,15 @@ export default function TaskDialog({
   showDialog,
   onSave,
 }: TaskDialogProps) {
-  const isNewTask = task.title === "" && task.category === "";
   const [editedTitle, setEditedTitle] = React.useState(task.title);
   const [editedCategory, setEditedCategory] = React.useState(task.category);
 
-  const { title, category } = task;
-
-  const handleUpdateTitle = (title: string) => {
-    setEditedTitle(title);
-  };
-
-  const handleUpdateCategory = (category: string) => {
-    setEditedCategory(category);
-  };
+  React.useEffect(() => {
+    if (showDialog) {
+      setEditedTitle(task.title);
+      setEditedCategory(task.category);
+    }
+  }, [showDialog, task]);
 
   const handleSave = () => {
     const nextTask = {
@@ -52,7 +47,7 @@ export default function TaskDialog({
 
     setTask(nextTask);
     if (onSave) {
-      onSave();
+      onSave(nextTask);
     } else {
       setShowDialog(false);
     }
@@ -72,12 +67,12 @@ export default function TaskDialog({
           <Input
             value={editedTitle}
             placeholder="Task title"
-            onChangeText={handleUpdateTitle}
+            onChangeText={setEditedTitle}
           />
           <Input
             value={editedCategory}
             placeholder="Category"
-            onChangeText={handleUpdateCategory}
+            onChangeText={setEditedCategory}
           />
         </View>
 

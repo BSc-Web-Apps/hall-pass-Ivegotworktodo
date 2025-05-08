@@ -9,6 +9,7 @@ export interface Task {
   title: string;
   category: string;
   isChecked: boolean;
+  count: number;
 }
 
 export interface TaskProps {
@@ -25,14 +26,27 @@ export default function Task({
   const [task, setTask] = React.useState(propTask);
   const [showDialog, setShowDialog] = React.useState(false);
   const { title, category, isChecked } = task;
-  const [count, setCount] = React.useState(0);
 
   function handleAdd() {
-    setCount((prev) => prev + 1);
+    const newCount = task.count + 1;
+    const updatedTask = {
+      ...task,
+      count: newCount,
+      isChecked: newCount === 0,
+    };
+    setTask(updatedTask);
+    onUpdate?.(updatedTask);
   }
 
   function handleSubtract() {
-    setCount((prev) => (prev > 0 ? prev - 1 : 0));
+    const newCount = task.count > 0 ? task.count - 1 : 0;
+    const updatedTask = {
+      ...task,
+      count: newCount,
+      isChecked: newCount === 0,
+    };
+    setTask(updatedTask);
+    onUpdate?.(updatedTask);
   }
 
   const handleSetChecked = (newChecked: boolean) => {
@@ -68,12 +82,12 @@ export default function Task({
             style={{ transform: [{ scale: 2 }] }}
           />
           <View className="flex justify-center gap-4 pt-5">
-            <button className="self-center text-white" onClick={handleAdd}>
-              Add 1
-            </button>
-            <button className="self-center text-white" onClick={handleSubtract}>
-              Remove 1
-            </button>
+            <TouchableOpacity onPress={handleAdd}>
+              <Text className="self-center text-white">Add 1</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleSubtract}>
+              <Text className="self-center text-white">Remove 1</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View className="py-4 flex gap-1 flex-1 h-full border-b border-foreground-transparent">
@@ -89,7 +103,7 @@ export default function Task({
             <Text className="text-red-500 text-xl">✕</Text>
           </TouchableOpacity>
         </View>
-        <Text className="text-white text-xl">{count}</Text>
+        <Text className="text-white text-xl">{task.count}</Text>
       </TouchableOpacity>
 
       <TaskDialog
