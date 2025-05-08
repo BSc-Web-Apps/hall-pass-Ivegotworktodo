@@ -19,6 +19,7 @@ interface TaskDialogProps {
   setTask: (task: Task) => void;
   setShowDialog: (showDialog: boolean) => void;
   showDialog: boolean;
+  onSave?: () => void;
 }
 
 export default function TaskDialog({
@@ -26,7 +27,9 @@ export default function TaskDialog({
   setTask,
   setShowDialog,
   showDialog,
+  onSave,
 }: TaskDialogProps) {
+  const isNewTask = task.title === "" && task.category === "";
   const [editedTitle, setEditedTitle] = React.useState(task.title);
   const [editedCategory, setEditedCategory] = React.useState(task.category);
 
@@ -48,7 +51,11 @@ export default function TaskDialog({
     };
 
     setTask(nextTask);
-    setShowDialog(false);
+    if (onSave) {
+      onSave();
+    } else {
+      setShowDialog(false);
+    }
   };
 
   return (

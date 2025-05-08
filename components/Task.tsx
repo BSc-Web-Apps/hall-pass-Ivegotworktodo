@@ -19,32 +19,65 @@ export default function Task({ task: propTask }: TaskProps) {
   const [task, setTask] = React.useState(propTask);
   const [showDialog, setShowDialog] = React.useState(false);
   const { title, category, isChecked } = task;
+  const [count, setCount] = React.useState(0);
+  const [checked, setChecked] = React.useState(isChecked);
 
-  const handleSetChecked = () => {
+  function handleAdd() {
+    setCount((prev) => prev + 1);
+  }
+
+  function handleSubtract() {
+    setCount((prev) => (prev > 0 ? prev - 1 : 0));
+  }
+
+  React.useEffect(() => {
+    setChecked(count === 0);
+  }, [count]);
+
+  const handleSetChecked = (newChecked: boolean) => {
     const nextChecked = !task.isChecked;
     setTask({ ...task, isChecked: nextChecked });
+    if (newChecked) {
+      setCount(0);
+    }
+    setChecked(newChecked);
   };
 
   return (
     <>
       <TouchableOpacity
         className="flex flex-row w-full bg-gray-800"
+        //className="flex flex-row h-40 w-full border-2 border-cyan-400"
         delayLongPress={500}
         onLongPress={() => setShowDialog(true)}
       >
         <View className="px-8 pt-8 w-24 h-full">
+          {/*<View className="flex w-24 h-full border-2 border-red-600 justify-center items-center"></View>*/}
           <Checkbox
             className="border-foreground checked:bg-foreground"
+            //className="border-pink-600"
             checked={isChecked}
             onCheckedChange={handleSetChecked}
+            style={{ transform: [{ scale: 2 }] }}
           />
+          <View className="flex justify-center gap-4 pt-5">
+            <button className="self-center text-white" onClick={handleAdd}>
+              Add 1
+            </button>
+            <button className="self-center text-white" onClick={handleSubtract}>
+              Remove 1
+            </button>
+          </View>
         </View>
         <View className="py-4 flex gap-1 flex-1 h-full border-b border-foreground-transparent">
+          {/*border-2*/}
           <Text className="text-foreground text-xl">{title}</Text>
+          {/*<Text className=" text-gray-300 text-xl">{title}</Text>*/}
           <Text className="text-foreground-transparent text-xl">
             {category}
           </Text>
         </View>
+        <Text className="text-white text-xl">{count}</Text>
       </TouchableOpacity>
 
       <TaskDialog
