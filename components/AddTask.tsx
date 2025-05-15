@@ -1,6 +1,7 @@
 import * as React from "react";
 import { TouchableOpacity, View } from "react-native";
 import TaskDialog from "./TaskDialogue";
+import { Task } from "./Task";
 
 interface AddTaskProps {
   onAdd: (title: string, category: string) => void;
@@ -31,9 +32,7 @@ export default function AddTask({ onAdd }: AddTaskProps) {
     <View className="absolute -bottom-0 z-10">
       <View className="w-24 h-24 p-1 bg-brand-primary rounded-full flex items-center justify-center">
         <TouchableOpacity onPress={() => setShowDialog(true)}>
-          <View className="w-full h-auto p-3 bg-brand-primary rounded-full flex items-center justify-center border-4 border-background">
-            +
-          </View>
+          <View className="w-full h-auto p-3 bg-brand-primary rounded-full flex items-center justify-center border-4 border-background" />
         </TouchableOpacity>
       </View>
 

@@ -69,7 +69,7 @@ export default function Task({
       <TouchableOpacity
         className="flex flex-row w-full bg-gray-800"
         //className="flex flex-row h-40 w-full border-2 border-cyan-400"
-        delayLongPress={500}
+        delayLongPress={100}
         onLongPress={() => setShowDialog(true)}
       >
         <View className="px-8 pt-8 w-24 h-full">
