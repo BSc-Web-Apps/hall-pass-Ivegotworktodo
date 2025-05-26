@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, View, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text } from "~/components/ui/text";
 
@@ -50,14 +50,25 @@ export default function ProjectsPage() {
   }, []);
 
   return (
-    <View className="flex-1 bg-background p-4">
-      <Text className="text-4xl font-bold text-center text-foreground mt-10 mb-4">
-        Projects
-      </Text>
-      <Text className="text-foreground text-2xl font-semibold mb-8">
+    <View className="flex-1 flex justify-between bg-background">
+      <View className="flex flex-row justify-center">
+        <View className="flex flex-row justify-center items-center pt-20 space-x-6">
+          <Text className="text-foreground font-bold text-7xl">HallPass</Text>
+          <Image
+            source={require("../assets/images/svg/hallpass-checkmark.svg")}
+            style={{ width: 82, height: 82 }}
+          />
+        </View>
+      </View>
+      <Text className="text-foreground text-3xl font-semibold pl-6 pt-14 mb-6">
         Current Projects
       </Text>
-      <ScrollView>
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: 24,
+          paddingVertical: 16,
+        }}
+      >
         {projects.length === 0 ? (
           <Text className="text-center text-lg text-foreground">
             No projects found.

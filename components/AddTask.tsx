@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View, Image } from "react-native";
 import TaskDialog from "./TaskDialogue";
 import { Task } from "./Task";
 
@@ -31,8 +31,11 @@ export default function AddTask({ onAdd }: AddTaskProps) {
   return (
     <View className="absolute -bottom-0 z-10">
       <View className="w-24 h-24 p-1 bg-brand-primary rounded-full flex items-center justify-center">
-        <TouchableOpacity onPress={() => setShowDialog(true)}>
-          <View className="w-full h-auto p-3 bg-brand-primary rounded-full flex items-center justify-center border-4 border-background" />
+        <TouchableOpacity
+          onPress={() => setShowDialog(true)}
+          className="items-center justify-center"
+        >
+          <Image source={require("../assets/images/svg/main-button.svg")} />
         </TouchableOpacity>
       </View>
 

@@ -3,8 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
 import { Platform } from "react-native";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
-import { Home as HomeIcon } from "~/lib/icons/Home";
-import { Info } from "~/lib/icons/Info";
+import { ListChecks } from "~/lib/icons/ListChecks";
+import { NotebookTabs } from "~/lib/icons/NotebookTabs";
 import { useColorScheme } from "~/lib/useColorScheme";
 import HomeScreen from "./index";
 import ProjectsPage from "./projects";
@@ -54,11 +54,11 @@ export default function RootLayout() {
         }}
       >
         <Tab.Screen
-          name="Home"
+          name="Tasks"
           component={HomeScreen}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <HomeIcon size={size} color={color} />
+              <ListChecks size={size} color={color} />
             ),
           }}
         />
@@ -66,7 +66,9 @@ export default function RootLayout() {
           name="Projects"
           component={ProjectsPage}
           options={{
-            tabBarIcon: ({ color, size }) => <Info size={size} color={color} />,
+            tabBarIcon: ({ color, size }) => (
+              <NotebookTabs size={size} color={color} />
+            ),
           }}
         />
       </Tab.Navigator>

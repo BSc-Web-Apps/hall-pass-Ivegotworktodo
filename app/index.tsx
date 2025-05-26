@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ScrollView, View } from "react-native";
+import { TouchableOpacity, ScrollView, View, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Task from "~/components/Task";
 import AddTask from "~/components/AddTask";
@@ -24,6 +24,7 @@ const saveTasks = async (updatedTasks: TaskItem[]) => {
 export default function HomeScreen() {
   const [tasks, setTasks] = React.useState<TaskItem[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [hasStarted, setHasStarted] = React.useState(false);
 
   React.useEffect(() => {
     const loadTasks = async () => {
@@ -67,25 +68,53 @@ export default function HomeScreen() {
     saveTasks(updatedTasks);
   };
 
+  if (!hasStarted) {
+    return (
+      <View className="flex-1 justify-center items-center bg-background px-6">
+        <View className="flex flex-row justify-center items-center pt-20 space-x-6 pb-20">
+          <Text className="text-foreground font-bold text-7xl">HallPass</Text>
+          <Image
+            source={require("../assets/images/svg/hallpass-checkmark.svg")}
+            style={{ width: 94, height: 94 }}
+          />
+        </View>
+        <Image
+          source={require("../assets/images/svg/hallpass-checkmark.svg")}
+          style={{ width: 100, height: 100, marginBottom: 40 }}
+        />
+        <TouchableOpacity
+          onPress={() => setHasStarted(true)}
+          className="bg-orange-500 rounded-full px-6 py-3"
+        >
+          <Text className="text-white text-xl font-semibold">Get Started</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View className="flex-1 flex justify-between bg-background">
       {/*flex-1 justify-center items-center gap-5 p-6 bg-background*/}
       <View className="flex flex-row justify-center">
         {/*w-full max-w-sm p-6 rounded-2xl*/}
-        <Text className="pt-20 text-foreground font-bold text-6xl">
-          Hall Pass
-        </Text>
+        <View className="flex flex-row justify-center items-center pt-20 space-x-6">
+          <Text className="text-foreground font-bold text-7xl">HallPass</Text>
+          <Image
+            source={require("../assets/images/svg/hallpass-checkmark.svg")}
+            style={{ width: 82, height: 82 }}
+          />
+        </View>
       </View>
       {/*add loading screen + add 'Please add your first task...'*/}
+      <Text className="text-foreground text-3xl font-semibold pl-6 pt-14 mb-6">
+        Today's Tasks
+      </Text>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 24,
           paddingVertical: 16,
         }}
       >
-        <Text className="text-foreground text-2xl font-semibold mb-8">
-          Today's Tasks
-        </Text>
         {isLoading ? (
           <Text className="text-center text-foreground text-lg">
             Loading tasks...
