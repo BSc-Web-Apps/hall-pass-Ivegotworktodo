@@ -71,22 +71,28 @@ export default function HomeScreen() {
   if (!hasStarted) {
     return (
       <View className="flex-1 justify-center items-center bg-background px-6">
-        <View className="flex flex-row justify-center items-center pt-20 space-x-6 pb-20">
+        <View className="flex flex-row justify-center items-center space-x-6 pb-14">
           <Text className="text-foreground font-bold text-7xl">HallPass</Text>
           <Image
             source={require("../assets/images/svg/hallpass-checkmark.svg")}
-            style={{ width: 94, height: 94 }}
+            style={{ width: 80, height: 80 }}
           />
         </View>
         <Image
-          source={require("../assets/images/svg/hallpass-checkmark.svg")}
-          style={{ width: 100, height: 100, marginBottom: 40 }}
+          source={require("../assets/images/png/landing-image2x.png")}
+          style={{ width: 360, height: 360, marginBottom: 40 }}
         />
+        <Text className="text-foreground opacity-50 text-4xl pb-20">
+          Uni. Sorted.
+        </Text>
         <TouchableOpacity
           onPress={() => setHasStarted(true)}
-          className="bg-orange-500 rounded-full px-6 py-3"
+          style={{ backgroundColor: "#FF5733" }}
+          className="rounded-full px-24 py-4"
         >
-          <Text className="text-white text-xl font-semibold">Get Started</Text>
+          <Text className="text-black text-2xl font-semibold text-center">
+            Get Started
+          </Text>
         </TouchableOpacity>
       </View>
     );
