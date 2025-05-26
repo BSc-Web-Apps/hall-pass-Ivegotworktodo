@@ -2,6 +2,7 @@ import * as React from "react";
 import { ScrollView, View, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text } from "~/components/ui/text";
+import { useFocusEffect } from "@react-navigation/native";
 
 interface TaskItem {
   id: number;
@@ -21,33 +22,38 @@ const TASKS_STORAGE_KEY = "hallpass_tasks";
 export default function ProjectsPage() {
   const [projects, setProjects] = React.useState<Project[]>([]);
 
-  React.useEffect(() => {
-    const loadAndGroupTasks = async () => {
-      const stored = await AsyncStorage.getItem(TASKS_STORAGE_KEY);
-      if (!stored) return;
+  useFocusEffect(
+    React.useCallback(() => {
+      const loadAndGroupTasks = async () => {
+        const stored = await AsyncStorage.getItem(TASKS_STORAGE_KEY);
+        if (!stored) {
+          setProjects([]);
+          return;
+        }
 
-      const tasks: TaskItem[] = JSON.parse(stored);
-      const categoryMap: Record<string, number> = {};
+        const tasks: TaskItem[] = JSON.parse(stored);
+        const categoryMap: Record<string, number> = {};
 
-      tasks.forEach((task) => {
-        categoryMap[task.category] = (categoryMap[task.category] || 0) + 1;
-      });
+        tasks.forEach((task) => {
+          categoryMap[task.category] = (categoryMap[task.category] || 0) + 1;
+        });
 
-      const colors = ["#60A5FA", "#34D399", "#FBBF24", "#F87171", "#A78BFA"];
+        const colors = ["#60A5FA", "#34D399", "#FBBF24", "#F87171", "#A78BFA"];
 
-      const grouped = Object.entries(categoryMap).map(
-        ([category, count], i) => ({
-          category,
-          count,
-          color: colors[i % colors.length],
-        })
-      );
+        const grouped = Object.entries(categoryMap).map(
+          ([category, count], i) => ({
+            category,
+            count,
+            color: colors[i % colors.length],
+          })
+        );
 
-      setProjects(grouped);
-    };
+        setProjects(grouped);
+      };
 
-    loadAndGroupTasks();
-  }, []);
+      loadAndGroupTasks();
+    }, [])
+  );
 
   return (
     <View className="flex-1 flex justify-between bg-background">
