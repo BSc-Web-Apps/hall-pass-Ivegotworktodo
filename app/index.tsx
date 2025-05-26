@@ -10,7 +10,6 @@ interface TaskItem {
   title: string;
   category: string;
   isChecked: boolean;
-  count: number;
 }
 
 const TASKS_STORAGE_KEY = "hallpass_tasks";
@@ -48,7 +47,7 @@ export default function HomeScreen() {
       tasks.length > 0 ? Math.max(...tasks.map((t) => t.id)) + 1 : 1;
     const updatedTasks = [
       ...tasks,
-      { id: nextId, title, category, isChecked: false, count: 0 },
+      { id: nextId, title, category, isChecked: false },
     ];
     setTasks(updatedTasks);
     saveTasks(updatedTasks);
@@ -84,6 +83,9 @@ export default function HomeScreen() {
           paddingVertical: 16,
         }}
       >
+        <Text className="text-foreground text-2xl font-semibold mb-8">
+          Today's Tasks
+        </Text>
         {isLoading ? (
           <Text className="text-center text-foreground text-lg">
             Loading tasks...

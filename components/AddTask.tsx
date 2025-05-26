@@ -37,7 +37,7 @@ export default function AddTask({ onAdd }: AddTaskProps) {
       </View>
 
       <TaskDialog
-        task={{ id: 0, title, category, isChecked: false, count: 0 }}
+        task={{ id: 0, title, category, isChecked: false }}
         setTask={(newTask) => {
           setTitle(newTask.title);
           setCategory(newTask.category);

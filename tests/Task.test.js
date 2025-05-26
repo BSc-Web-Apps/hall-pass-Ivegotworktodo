@@ -9,7 +9,6 @@ describe("Task", () => {
       title: "Test Task",
       category: "Test Category",
       isChecked: false,
-      count: 0,
     };
 
     render(<Task task={task} />);

@@ -7,7 +7,7 @@ import { Home as HomeIcon } from "~/lib/icons/Home";
 import { Info } from "~/lib/icons/Info";
 import { useColorScheme } from "~/lib/useColorScheme";
 import HomeScreen from "./index";
-import SettingsScreen from "./settings";
+import ProjectsPage from "./projects";
 import { PortalHost } from "@rn-primitives/portal";
 
 const Tab = createBottomTabNavigator();
@@ -46,7 +46,7 @@ export default function RootLayout() {
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: "hsl(11, 72%, 3%)",
+            backgroundColor: "000000",
             borderTopColor: "transparent",
           },
           tabBarActiveTintColor: "hsl(11, 100%, 60%)",
@@ -63,8 +63,8 @@ export default function RootLayout() {
           }}
         />
         <Tab.Screen
-          name="Settings"
-          component={SettingsScreen}
+          name="Projects"
+          component={ProjectsPage}
           options={{
             tabBarIcon: ({ color, size }) => <Info size={size} color={color} />,
           }}
