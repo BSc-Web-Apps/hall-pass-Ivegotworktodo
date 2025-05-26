@@ -3,6 +3,7 @@ import { ScrollView, View, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Text } from "~/components/ui/text";
 import { useFocusEffect } from "@react-navigation/native";
+import { Checkbox } from "~/components/ui/checkbox";
 
 interface TaskItem {
   id: number;
@@ -15,12 +16,23 @@ interface Project {
   category: string;
   count: number;
   color: string;
+  checked: boolean;
 }
 
 const TASKS_STORAGE_KEY = "hallpass_tasks";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = React.useState<Project[]>([]);
+
+  const toggleProjectChecked = (category: string) => {
+    setProjects((prev) =>
+      prev.map((project) =>
+        project.category === category
+          ? { ...project, checked: !project.checked }
+          : project
+      )
+    );
+  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -45,6 +57,7 @@ export default function ProjectsPage() {
             category,
             count,
             color: colors[i % colors.length],
+            checked: false,
           })
         );
 
@@ -83,13 +96,30 @@ export default function ProjectsPage() {
           projects.map((project) => (
             <View
               key={project.category}
-              className="rounded-xl p-4 mb-4"
-              style={{ backgroundColor: project.color }}
+              className="flex flex-row w-full bg-background"
             >
-              <Text className="text-white text-xl font-bold">
-                {project.category}
+              <View className="px-8 pt-10 w-24 h-full4">
+                <Checkbox
+                  className="border-foreground checked:bg-foreground"
+                  checked={project.checked}
+                  onCheckedChange={() => toggleProjectChecked(project.category)}
+                  style={{
+                    borderColor: project.color,
+                    transform: [{ scale: 2.5 }],
+                  }}
+                />
+              </View>
+              <View className="pt-7 py-4 flex gap-1 flex-1 h-full pb-12 border-b border-foreground-transparent">
+                <Text style={{ color: project.color }} className="text-3xl">
+                  {project.category}
+                </Text>
+              </View>
+              <Text
+                style={{ color: project.color }}
+                className="pt-6 text-3xl pr-8"
+              >
+                {project.count}
               </Text>
-              <Text className="text-white text-xl">{project.count}</Text>
             </View>
           ))
         )}

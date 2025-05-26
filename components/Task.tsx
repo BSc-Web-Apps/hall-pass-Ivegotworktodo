@@ -38,12 +38,10 @@ export default function Task({
     <>
       <TouchableOpacity
         className="flex flex-row w-full bg-background"
-        //className="flex flex-row h-40 w-full border-2 border-cyan-400"
         delayLongPress={100}
         onLongPress={() => setShowDialog(true)}
       >
         <View className="px-8 pt-8 w-24 h-full">
-          {/*<View className="flex w-24 h-full border-2 border-red-600 justify-center items-center"></View>*/}
           <Checkbox
             className="border-foreground checked:bg-foreground"
             checked={isChecked}
@@ -52,7 +50,6 @@ export default function Task({
           />
         </View>
         <View className="py-4 flex gap-1 flex-1 h-full border-b border-foreground-transparent">
-          {/*border-2*/}
           <Text
             className={`text-xl ${
               task.isChecked
