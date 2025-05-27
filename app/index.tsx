@@ -100,9 +100,7 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 flex justify-between bg-background">
-      {/*flex-1 justify-center items-center gap-5 p-6 bg-background*/}
       <View className="flex flex-row justify-center">
-        {/*w-full max-w-sm p-6 rounded-2xl*/}
         <View className="flex flex-row justify-center items-center pt-20 space-x-6">
           <Text className="text-foreground font-bold text-7xl">HallPass</Text>
           <Image
@@ -111,7 +109,6 @@ export default function HomeScreen() {
           />
         </View>
       </View>
-      {/*add loading screen + add 'Please add your first task...'*/}
       <Text className="text-foreground text-3xl font-semibold pl-6 pt-14 mb-6">
         Today's Tasks
       </Text>

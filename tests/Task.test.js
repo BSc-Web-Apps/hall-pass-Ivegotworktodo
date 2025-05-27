@@ -13,7 +13,6 @@ describe("Task", () => {
 
     render(<Task task={task} />);
 
-    // Just check if the title and category are displayed
     const titleElement = screen.getByText("Test Task");
     const categoryElement = screen.getByText("Test Category");
     expect(titleElement).toBeTruthy();
